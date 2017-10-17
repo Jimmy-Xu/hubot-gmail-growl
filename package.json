@@ -1,6 +1,6 @@
 {
   "name": "hubot-gmail-growl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Hubot plugin to check Gmail and notify via growl",
   "main": "index.coffee",
   "scripts": {
@@ -26,6 +26,7 @@
   "dependencies": {
     "inbox": "^1.1.59",
     "lodash": "^2.4.2",
-    "mailparser": "^0.4.9"
+    "mailparser": "^0.4.9",
+    "node-growl": "^0.1.1"
   }
 }

@@ -22,44 +22,11 @@
 
 inbox        = require 'inbox'
 {MailParser} = require 'mailparser'
+nodeGrowl    = require 'node-growl'
 
 _ = require 'lodash'
-  
+
 module.exports = (robot) ->
-
-###################################################
-# func
-###################################################
-  run_gntp_cmd = (message, cb) ->
-    appName = "hubot-gmail-growl"
-    defaultPort = "23053"
-    if robot.adapterName is "slack"
-      title = "From Slack[\##{roomName} #{senderName}]"
-    else
-      title = "From #{robot.adapterName}"
-
-    server = process.env.HUBOT_GNTP_SERVER
-    if server? and server isnt ""
-      if (server.split ":").length is 1
-        server = server + ":" + defaultPort
-      else if (server.split ":").length > 2
-        console.log "'#{server}' is invalid server, skip execute gntp-send"
-        return
-    else
-      console.log "no gntp server specified, skip execute gntp-send"
-      return
-
-    # prepare args
-    args = ["-s", server, "-p", process.env.HUBOT_GNTP_PASSWORD, "-a", appName, title, message]
-    console.debug "[run_gntp_cmd] spawn: gntp-send ", args
-    # exec gntp-send
-    spawn = require("child_process").spawn
-    child = spawn("gntp-send", args)
-    result = []
-    child.stdout.on "data", (buffer) -> result.push buffer.toString()
-    child.stderr.on "data", (buffer) -> result.push buffer.toString()
-    child.stdout.on "end", -> cb result
-
 
 ###################################################
 # main
@@ -68,6 +35,10 @@ module.exports = (robot) ->
   interval = parseInt(process.env.HUBOT_GMAIL_CHECK_INTERVAL || 1)
   label = process.env.HUBOT_GMAIL_LABEL || "Inbox"
   client = false
+  gntpOpts =
+    server: process.env.HUBOT_GNTP_SERVER
+    password: process.env.HUBOT_GNTP_PASSWORD
+    appname: "hubot-gmail-growl"
 
   robot.respond /gmail-growl start/i, (msg) ->
     if not client
@@ -122,13 +93,16 @@ module.exports = (robot) ->
         if mail.text
           mailDetail += "\n"
           mailDetail += mail.text
-        msg.send "From: #{sender.name} <#{sender.address}>\n Subject: #{mail.subject}\n"
-        run_gntp_cmd mailDetail, (text) ->
+        msgTitle = "From: #{sender.name} <#{sender.address}>"
+        msgContent = "Subject: #{mail.subject}"
+        msg.send "#{msgTitle}\n#{msgContent}"
+        # notify via gntp-send
+        nodeGrowl msgTitle, msgContent, gntpOpts, (text) ->
           console.log "gntp result:", text
-      ), (() ->
-        robot.logger.info "Max UID: #{client.lastfetch}"
-        setTimer interval, msg
-      )
+    ), (() ->
+      robot.logger.info "Max UID: #{client.lastfetch}"
+      setTimer interval, msg
+    )
 
   doFetch = (callback, onFinish) ->
     robot.logger.info "Check it!"
