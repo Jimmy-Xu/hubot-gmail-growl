@@ -91,4 +91,3 @@ $ docker run --name "hubot-growl" \
 -d \
 jordan/hubot-slack:latest
 ```
-

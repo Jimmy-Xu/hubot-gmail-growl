@@ -77,7 +77,7 @@ module.exports = (robot) ->
           msg.send e
           return false
         robot.logger.info("Message count in #{label}: " + info.count)
-        setTimer interval, msg
+        setTimer 0, msg
     return _client
 
   setTimer = (_interval, msg) ->
@@ -97,6 +97,7 @@ module.exports = (robot) ->
         msgContent = "Subject: #{mail.subject}"
         msg.send "#{msgTitle}\n#{msgContent}"
         # notify via gntp-send
+        console.debug "title:", msgTitle, " message:", msgContent, " gntpOpts:", gntpOpts
         nodeGrowl msgTitle, msgContent, gntpOpts, (text) ->
           console.log "gntp result:", text
     ), (() ->
@@ -111,7 +112,7 @@ module.exports = (robot) ->
       if e
         callback e
       else if maxUID <= client.lastfetch
-        callback(new Error "No new mail")
+        callback("No new mail")
       else
         for message in messages
           if client.lastfetch < message.UID
