@@ -1,0 +1,31 @@
+{
+  "name": "hubot-gmail-growl",
+  "version": "0.1.0",
+  "description": "Hubot plugin to check Gmail and notify via growl",
+  "main": "index.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Jimmy-Xu/hubot-gmail-growl.git"
+  },
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "plugin",
+    "gmail",
+    "growl"
+  ],
+  "author": "Jimmy Xu <xjimmyshcn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jimmy-Xu/hubot-gmail-growl/issues"
+  },
+  "homepage": "https://github.com/Jimmy-Xu/hubot-gmail-growl",
+  "dependencies": {
+    "inbox": "^1.1.59",
+    "lodash": "^2.4.2",
+    "mailparser": "^0.4.9"
+  }
+}
