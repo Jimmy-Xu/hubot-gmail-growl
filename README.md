@@ -4,6 +4,13 @@ hubot-gmail-growl
 [Hubot](http://hubot.github.com/) script to check Gmail and notify via growl.
 
 
+# Dependency
+
+- inbox
+- mailparser
+- node-growl
+
+
 # external-scripts.json
 
     ["hubot-gmail-growl"]
@@ -15,7 +22,7 @@ Run `npm install` to install hubot-gmail-growl and dependencies.
 
 ```
 //for gmail
-HUBOT_GMAIL_USER           # - email address
+HUBOT_GMAIL_USERNAME       # - email address
 HUBOT_GMAIL_PASSWORD       # - email password
 HUBOT_GMAIL_LABEL          # - Gmail label name
 HUBOT_GMAIL_CHECK_INTERVAL # default fetch interval(mins)
@@ -44,12 +51,12 @@ REF: https://github.com/jjethwa/hubot-slack
 
 ```
 export EXTERNAL_SCRIPTS="hubot-help,hubot-gmail-growl"
-export GNTP_SERVER="192.168.1.23:23053"
-export GNTP_PASSWORD="xxxxxx"
-export GMAIL_USERNAME="xxx@hyper.sh"
-export GMAIL_PASSWORD="xxxxx"
-export GMAIL_LABEL="xxx"
-export GMAIL_CHECK_INTERVAL="5"
+export HUBOT_GNTP_SERVER="192.168.1.23:23053"
+export HUBOT_GNTP_PASSWORD="xxxxxx"
+export HUBOT_GMAIL_USERNAME="xxx@hyper.sh"
+export HUBOT_GMAIL_PASSWORD="xxxxx"
+export HUBOT_GMAIL_LABEL="xxx"
+export HUBOT_GMAIL_CHECK_INTERVAL="5"
 
 // add plugin hubot-gmail-growl
 // for basic auth, go to https://myaccount.google.com/security?pli=1#connectedapps, set "Allow less secure app" to "ON"
@@ -57,13 +64,9 @@ $ docker run --name "hubot-growl" \
 -e HUBOT_NAME="hubot" \
 -e HUBOT_OWNER="jimmy" \
 -e EXTERNAL_SCRIPTS="$EXTERNAL_SCRIPTS" \
--e HUBOT_SLACK_TOKEN="${SLACK_TOKEN}" \
--e HYPER_ACCESS_KEY="${HYPER_ACCESS_KEY}" -e HYPER_SECRET_KEY="${HYPER_SECRET_KEY}" \
--e HUBOT_GNTP_SERVER="${GNTP_SERVER}" -e HUBOT_GNTP_PASSWORD="${GNTP_PASSWORD}" \
--e HUBOT_GMAIL_USERNAME="$GMAIL_USERNAME" -e HUBOT_GMAIL_PASSWORD="$GMAIL_PASSWORD" \
--e HUBOT_GMAIL_LABEL="$GMAIL_LABEL" -e HUBOT_GMAIL_CHECK_INTERVAL="$GMAIL_CHECK_INTERVAL" \
--e http_proxy=${http_proxy} \
--e https_proxy=${https_proxy} \
+-e HUBOT_GNTP_SERVER="${HUBOT_GNTP_SERVER}" -e HUBOT_GNTP_PASSWORD="${HUBOT_GNTP_PASSWORD}" \
+-e HUBOT_GMAIL_USERNAME="$HUBOT_GMAIL_USERNAME" -e HUBOT_GMAIL_PASSWORD="$HUBOT_GMAIL_PASSWORD" \
+-e HUBOT_GMAIL_LABEL="$HUBOT_GMAIL_LABEL" -e HUBOT_GMAIL_CHECK_INTERVAL="$HUBOT_GMAIL_CHECK_INTERVAL" \
 -it --rm \
 jordan/hubot-slack:latest /bin/bash
 
@@ -73,5 +76,19 @@ node -e "console.log(JSON.stringify('$EXTERNAL_SCRIPTS'.split(',')))" > external
 
 //start hubot
 HUBOT_LOG_LEVEL=debug  bin/hubot -n $HUBOT_NAME
+```
+
+## start as daemon
+
+```
+$ docker run --name "hubot-growl" \
+-e HUBOT_NAME="hubot" \
+-e HUBOT_OWNER="jimmy" \
+-e EXTERNAL_SCRIPTS="$EXTERNAL_SCRIPTS" \
+-e HUBOT_GNTP_SERVER="${HUBOT_GNTP_SERVER}" -e HUBOT_GNTP_PASSWORD="${HUBOT_GNTP_PASSWORD}" \
+-e HUBOT_GMAIL_USERNAME="$HUBOT_GMAIL_USERNAME" -e HUBOT_GMAIL_PASSWORD="$HUBOT_GMAIL_PASSWORD" \
+-e HUBOT_GMAIL_LABEL="$HUBOT_GMAIL_LABEL" -e HUBOT_GMAIL_CHECK_INTERVAL="$HUBOT_GMAIL_CHECK_INTERVAL" \
+-d \
+jordan/hubot-slack:latest
 ```
 

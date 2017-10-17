@@ -2,7 +2,7 @@
 #   Get new mail from GMail, then notify via growl
 #
 # Configuration:
-#   HUNOT_GMAIL_USERNAME
+#   HUBOT_GMAIL_USERNAME
 #   HUBOT_GMAIL_PASSWORD
 #   HUBOT_GMAIL_LABEL
 #   HUBOT_GMAIL_CHECK_INTERVAL
