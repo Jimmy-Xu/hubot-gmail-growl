@@ -67,7 +67,7 @@ module.exports = (robot) ->
   initClient = (msg) ->
     gmail_server =  "imap.gmail.com"
     gmail_port = false
-    if process.env.HUBOT_IMAP_PROXY_SERVER and process.env.HUBOT_IMAP_PROXY_PORT :
+    if process.env.HUBOT_IMAP_PROXY_SERVER and process.env.HUBOT_IMAP_PROXY_PORT
       gmail_server = process.env.HUBOT_IMAP_PROXY_SERVER
       gmail_port = process.env.HUBOT_IMAP_PROXY_PORT
     robot.logger.info "Initializing IMAP client..."
