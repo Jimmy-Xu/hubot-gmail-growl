@@ -8,6 +8,9 @@
 #   HUBOT_GMAIL_CHECK_INTERVAL
 #   HUBOT_GNTP_SERVER
 #   HUBOT_GNTP_PASSWORD
+#   HUBOT_IMAP_PROXY_SERVER
+#   HUBOT_IMAP_PROXY_PORT
+
 #
 # Commands:
 #   hubot gmail-growl start - Start the gmail checker via IMAP
@@ -62,8 +65,13 @@ module.exports = (robot) ->
     msg.send "Changed the GMail fetch interval"
 
   initClient = (msg) ->
+    gmail_server =  "imap.gmail.com"
+    gmail_port = false
+    if process.env.HUBOT_IMAP_PROXY_SERVER and process.env.HUBOT_IMAP_PROXY_PORT :
+      gmail_server = process.env.HUBOT_IMAP_PROXY_SERVER
+      gmail_port = process.env.HUBOT_IMAP_PROXY_PORT
     robot.logger.info "Initializing IMAP client..."
-    _client = inbox.createConnection false, "imap.gmail.com", {
+    _client = inbox.createConnection gmail_port, gmail_server, {
       secureConnection: true
       auth:
         user: process.env.HUBOT_GMAIL_USERNAME
