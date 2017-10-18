@@ -1,6 +1,6 @@
 {
   "name": "hubot-gmail-growl",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Hubot plugin to check Gmail and notify via growl",
   "main": "index.coffee",
   "scripts": {
