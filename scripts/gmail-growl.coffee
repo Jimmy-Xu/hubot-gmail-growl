@@ -10,7 +10,6 @@
 #   HUBOT_GNTP_PASSWORD
 #   HUBOT_IMAP_PROXY_SERVER
 #   HUBOT_IMAP_PROXY_PORT
-
 #
 # Commands:
 #   hubot gmail-growl start - Start the gmail checker via IMAP
