@@ -93,23 +93,17 @@ module.exports = (robot) ->
         robot.logger.info e
       else
         robot.logger.info "Get mail: ", mail.subject
-        mailDetail = ""
         sender = mail.from[0]
-        mailDetail += "From: #{sender.name} <#{sender.address}>\n"
-        mailDetail += "Subject: #{mail.subject}\n"
-        if mail.text
-          mailDetail += "\n"
-          mailDetail += mail.text
-        msgTitle = "From: #{sender.name} <#{sender.address}>"
+        msgTitle = "From Gmail[#{sender.name} <#{sender.address}>]"
         msgContent = "Subject: #{mail.subject}"
         msg.send "#{msgTitle}\n#{msgContent}"
         # notify via gntp-send
         console.debug "title:", msgTitle, " message:", msgContent, " gntpOpts:", gntpOpts
         nodeGrowl msgTitle, msgContent, gntpOpts, (text) ->
           if text isnt null
-            console.log ">gntp-send failed:", text
+            robot.logger.info ">gntp-send failed:", text
           else
-            console.log ">gntp-send OK"
+            robot.logger.info ">gntp-send OK"
     ), (() ->
       robot.logger.info "Max UID: #{client.lastfetch}"
       setTimer interval, msg
