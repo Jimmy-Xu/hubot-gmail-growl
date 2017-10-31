@@ -106,15 +106,24 @@ module.exports = (robot) ->
         # notify via gntp-send
         console.debug "title:", msgTitle, " message:", msgContent, " gntpOpts:", gntpOpts
         nodeGrowl msgTitle, msgContent, gntpOpts, (text) ->
-          console.log "gntp result:", text
+          if text isnt null
+            console.log ">gntp-send failed:", text
+          else
+            console.log ">gntp-send OK"
     ), (() ->
       robot.logger.info "Max UID: #{client.lastfetch}"
       setTimer interval, msg
     )
 
   doFetch = (callback, onFinish) ->
-    robot.logger.info "Check it!"
-    client.listMessages -10, (e, messages) ->
+    batchN = 0
+    if client.lastfetch is 0
+      batchN = 1
+      robot.logger.info "First time check, get latest #{batchN} email"
+    else
+      batchN = 10
+      robot.logger.info "Check it!(get latest #{batchN}) emails"
+    client.listMessages -batchN, (e, messages) ->
       maxUID = _.max(_.map messages, (m) -> m.UID)
       if e
         callback e
